@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/AndreVede/P6-Piicante-api/issues"
   },
-  "homepage": "https://github.com/AndreVede/P6-Piicante-api#readme"
+  "homepage": "https://github.com/AndreVede/P6-Piicante-api#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20",
+    "prettier": "2.8.3"
+  }
 }
