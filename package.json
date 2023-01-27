@@ -1,0 +1,22 @@
+{
+  "name": "p6-piicante-api",
+  "version": "1.0.0",
+  "description": "Projet Openclassrooms - api de Piicante",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndreVede/P6-Piicante-api.git"
+  },
+  "keywords": [
+    "api"
+  ],
+  "author": "Zacharie Boisnard",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndreVede/P6-Piicante-api/issues"
+  },
+  "homepage": "https://github.com/AndreVede/P6-Piicante-api#readme"
+}
