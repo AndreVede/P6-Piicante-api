@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/AndreVede/P6-Piiquante-api#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "mongoose": "^6.9.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20",
