@@ -7,6 +7,6 @@ const authCtrl = require('../controllers/auth');
 router.post('/signup', authCtrl.signup);
 
 // login
-router.post('login', authCtrl.login);
+router.post('/login', authCtrl.login);
 
 module.exports = router;

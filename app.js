@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 
 const authRoute = require('./routes/auth');
@@ -15,14 +16,15 @@ const uri = `mongodb+srv://${mongodbClient.username}:${mongodbClient.password}@p
 mongoose
     .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
-        console.log('MongoDB is connected !');
+        console.log('>>>> MongoDB is connected ! <<<<');
     })
     .catch(error => {
-        console.error('MongoDB not connected !');
+        console.error('>>>> MongoDB not connected ! <<<<');
     });
 
 //initialisation d'express
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', authRoute);
