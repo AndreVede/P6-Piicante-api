@@ -13,6 +13,7 @@ const mongodbClient = {
 };
 const uri = `mongodb+srv://${mongodbClient.username}:${mongodbClient.password}@piiquante-api.oyec8pr.mongodb.net/?retryWrites=true&w=majority`;
 
+mongoose.set('strictQuery', true);
 mongoose
     .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
