@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const validate = require('mongoose-validator');
 
 const sauceSchema = mongoose.Schema({
     userId: { type: String, required: true },
@@ -11,8 +10,8 @@ const sauceSchema = mongoose.Schema({
     heat: { type: Number, required: true, min: 1, max: 10 },
     likes: { type: Number, default: 0 },
     dislikes: { type: Number, default: 0 },
-    usersLiked: { type: [String], default: undefined },
-    usersDisliked: { type: [String], default: undefined },
+    usersLiked: { type: [String], default: [] },
+    usersDisliked: { type: [String], default: [] },
 });
 
 module.exports = mongoose.model('Sauce', sauceSchema);
