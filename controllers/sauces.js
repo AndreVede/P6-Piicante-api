@@ -184,13 +184,6 @@ exports.evalSauce = (req, res, next) => {
                     break;
             }
             // Appliquer les changements
-            console.log({
-                ...sauce._doc,
-                likes: likeUpdate.likes,
-                dislikes: likeUpdate.dislikes,
-                usersLiked: likeUpdate.usersLiked,
-                usersDisliked: likeUpdate.usersDisliked,
-            });
             Sauce.updateOne(
                 { _id: req.params.id },
                 {
