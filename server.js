@@ -1,3 +1,7 @@
+// Initialise les variables d'environnement
+const dotenv = require('dotenv');
+dotenv.config({ path: './.env' });
+
 const http = require('http');
 const app = require('./app');
 

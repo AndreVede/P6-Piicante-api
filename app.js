@@ -7,12 +7,7 @@ const authRoute = require('./routes/auth');
 const saucesRoute = require('./routes/sauces');
 
 // accès mongoDB
-const mongodbClient = {
-    username: 'piiquante-user',
-    password:
-        '73pu2zEfKZ34cSJiU352vxJSHF5PqzfkaDva6RaEdu5Ew9T6H6j8Eb7Yqqr7sgNf9GakZK',
-};
-const uri = `mongodb+srv://${mongodbClient.username}:${mongodbClient.password}@piiquante-api.oyec8pr.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.MONGO_CLIENT_USERNAME}:${process.env.MONGO_CLIENT_PASSWORD}@piiquante-api.oyec8pr.mongodb.net/?retryWrites=true&w=majority`;
 
 mongoose.set('strictQuery', true);
 mongoose

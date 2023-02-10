@@ -1,5 +1,4 @@
 const User = require('../models/User');
-const constants = require('../utils/constants');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -42,7 +41,7 @@ exports.login = (req, res, next) => {
                                 userId: user._id,
                                 token: jwt.sign(
                                     { userId: user._id },
-                                    constants.tokenSecret,
+                                    process.env.SECRET_FOR_TOKEN,
                                     { expiresIn: '24h' }
                                 ),
                             });
