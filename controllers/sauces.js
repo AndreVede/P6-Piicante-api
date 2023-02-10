@@ -1,4 +1,5 @@
 const Sauce = require('../models/Sauce');
+const fs = require('fs');
 
 exports.getAllSauces = (req, res, next) => {
     Sauce.find()
@@ -6,7 +7,11 @@ exports.getAllSauces = (req, res, next) => {
         .catch(error => res.status(401).json({ error }));
 };
 
-exports.getSauceById = (req, res, next) => {};
+exports.getSauceById = (req, res, next) => {
+    Sauce.findById({ _id: req.params.id })
+        .then(sauce => res.status(200).json(sauce))
+        .catch(error => res.status(401).json({ error }));
+};
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
@@ -27,6 +32,7 @@ exports.createSauce = (req, res, next) => {
 };
 
 exports.updateSauce = (req, res, next) => {
+    // Initialisation de la sauce
     const sauceObject = req.file
         ? {
               ...JSON.parse(req.body.sauce),
@@ -37,6 +43,20 @@ exports.updateSauce = (req, res, next) => {
         : { ...req.body };
     delete sauceObject._userId;
 
+    /**
+     * Update the Sauce
+     */
+    const callUpdateSauce = () => {
+        // Update de la sauce
+        Sauce.updateOne(
+            { _id: req.params.id },
+            { ...sauceObject, _id: req.params.id }
+        )
+            .then(() => res.status(200).json({ message: 'Sauce mise à jour' }))
+            .catch(error => res.status(401).json({ error }));
+    };
+
+    // Vérification de la présence de la sauce et de l'autorité de l'utilisateur
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
             if (sauce.userId !== req.auth.userId) {
@@ -44,19 +64,39 @@ exports.updateSauce = (req, res, next) => {
                     message: "L'utilisateur a fait une action non autorisée",
                 });
             } else {
-                Sauce.updateOne(
-                    { _id: req.params.id },
-                    { ...sauceObject, _id: req.params.id }
-                )
-                    .then(() =>
-                        res.status(200).json({ message: 'Sauce mise à jour' })
-                    )
-                    .catch(error => res.status(401).json({ error }));
+                // Suppression de l'ancienne image si l'image est mise à jour
+                if (!!req.file) {
+                    const filename = sauce.imageUrl.split('/images/')[1];
+                    fs.unlink(`images/${filename}`, () => {
+                        callUpdateSauce();
+                    });
+                } else {
+                    callUpdateSauce();
+                }
             }
         })
         .catch(error => res.status(400).json({ error }));
 };
 
-exports.deleteSauce = (req, res, next) => {};
+exports.deleteSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+        .then(sauce => {
+            if (sauce.userId !== req.auth.userId) {
+                res.status(401).json({
+                    message: "L'utilisateur a fait une action non autorisée",
+                });
+            } else {
+                const filename = sauce.imageUrl.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {
+                    Sauce.deleteOne({ _id: req.params.id })
+                        .then(() =>
+                            res.status(200).json({ message: 'Sauce supprimée' })
+                        )
+                        .catch(error => res.status(401).json({ error }));
+                });
+            }
+        })
+        .catch(error => res.status(500).json({ error }));
+};
 
 exports.evalSauce = (req, res, next) => {};
