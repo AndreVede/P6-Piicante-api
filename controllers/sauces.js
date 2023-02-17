@@ -182,6 +182,12 @@ exports.evalSauce = (req, res, next) => {
                         });
                     }
                     break;
+                default:
+                    res.status(401).json({
+                        message:
+                            "L'utilisateur a fait une action non autorisée",
+                    });
+                    break;
             }
             // Appliquer les changements
             Sauce.updateOne(
