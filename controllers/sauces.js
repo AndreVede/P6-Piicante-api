@@ -46,12 +46,12 @@ exports.updateSauce = (req, res, next) => {
     /**
      * Update the Sauce
      */
-    const callUpdateSauce = () => {
+    const callUpdateSauce = _callback => {
         Sauce.updateOne(
             { _id: req.params.id },
             { ...sauceObject, _id: req.params.id }
         )
-            .then(() => res.status(200).json({ message: 'Sauce mise à jour' }))
+            .then(() => _callback())
             .catch(error => res.status(401).json({ error }));
     };
 
@@ -66,10 +66,18 @@ exports.updateSauce = (req, res, next) => {
                 // Suppression de l'ancienne image si l'image est mise à jour
                 if (!!req.file) {
                     const filename = sauce.imageUrl.split('/images/')[1];
-                    fs.unlink(`images/${filename}`, () => callUpdateSauce());
+                    callUpdateSauce(() => {
+                        fs.unlink(`images/${filename}`, () =>
+                            res
+                                .status(200)
+                                .json({ message: 'Sauce mise à jour' })
+                        );
+                    });
                 } else {
                     // update pour les cas d'absence de nouvelle image
-                    callUpdateSauce();
+                    callUpdateSauce(() =>
+                        res.status(200).json({ message: 'Sauce mise à jour' })
+                    );
                 }
             }
         })
@@ -85,13 +93,14 @@ exports.deleteSauce = (req, res, next) => {
                 });
             } else {
                 const filename = sauce.imageUrl.split('/images/')[1];
-                fs.unlink(`images/${filename}`, () => {
-                    Sauce.deleteOne({ _id: req.params.id })
-                        .then(() =>
+
+                Sauce.deleteOne({ _id: req.params.id })
+                    .then(() => {
+                        fs.unlink(`images/${filename}`, () =>
                             res.status(200).json({ message: 'Sauce supprimée' })
-                        )
-                        .catch(error => res.status(401).json({ error }));
-                });
+                        );
+                    })
+                    .catch(error => res.status(401).json({ error }));
             }
         })
         .catch(error => res.status(500).json({ error }));
