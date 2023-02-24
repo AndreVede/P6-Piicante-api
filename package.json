@@ -4,6 +4,8 @@
   "description": "Projet Openclassrooms - api de Piiquante",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
+    "http-start": "node server-http.js",
     "watch": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

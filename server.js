@@ -3,6 +3,8 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env' });
 
 const http = require('http');
+const https = require('https');
+const fs = require('fs');
 const app = require('./app');
 
 // Traite le port et vérifie sa conformité s'il vient d'une variable d'environnement
@@ -48,7 +50,30 @@ const errorHandler = error => {
 };
 
 // démarrage du serveur
-const server = http.createServer(app);
+
+// Traite la configuration https et vérifie sa conformité si elle vient d'une variable d'environnement
+const checkHttpsConfig = val => {
+    switch (val.toUpperCase()) {
+        case 'HTTPS':
+            return true;
+        case 'HTTP':
+            return false;
+        default:
+            return false;
+    }
+};
+
+const options = {
+    key: fs.readFileSync('selfsigned.key'),
+    cert: fs.readFileSync('selfsigned.crt'),
+};
+
+// récupère la variable d'environnement
+const isHttps = checkHttpsConfig(process.env.PROTOCOL || 'HTTP');
+
+const server = isHttps
+    ? https.createServer(options, app)
+    : http.createServer(app);
 
 server.on('error', errorHandler);
 server.on('listening', () => {

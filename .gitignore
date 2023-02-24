@@ -105,3 +105,7 @@ dist
 
 # dossier images
 images/
+
+# certificats
+selfsigned.key
+selfsigned.crt
