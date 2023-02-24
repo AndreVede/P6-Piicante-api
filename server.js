@@ -63,13 +63,15 @@ const checkHttpsConfig = val => {
     }
 };
 
-const options = {
-    key: fs.readFileSync('selfsigned.key'),
-    cert: fs.readFileSync('selfsigned.crt'),
-};
-
 // récupère la variable d'environnement
 const isHttps = checkHttpsConfig(process.env.PROTOCOL || 'HTTP');
+
+const options = isHttps
+    ? {
+          key: fs.readFileSync('selfsigned.key'),
+          cert: fs.readFileSync('selfsigned.crt'),
+      }
+    : undefined;
 
 const server = isHttps
     ? https.createServer(options, app)
